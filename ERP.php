@@ -187,7 +187,7 @@ function Fcall($q,$type='',$from){
     $declarations->setProperties($p);
     $declarations->addDeclaration("find_cryptoprice", "尋找特定加密貨幣在特定交易所的的價格");
 
-   $p = array(["location","","城市或地區,台北,桃園,大湳...等"],
+    $p = array(["location","","城市或地區,台北,桃園,大湳...等"],
             	["movie","","任何電影名稱"]            	
         	);
     $declarations->setProperties($p);
@@ -197,7 +197,7 @@ function Fcall($q,$type='',$from){
 
 
     $post_fields['tools']=array("function_declarations"=>$tools);
-     $header  = [
+    $header  = [
         'Content-Type: application/json'
     ];
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -253,6 +253,8 @@ function GAI($q,$type='',$from){
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POST, 1);
+	curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, 0);
+	curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, 0);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_fields));
     curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
@@ -393,25 +395,7 @@ function PushtoLineNotify($from,$title,$message=''){
 
 
 
-function make_semiangle($str)
-{
-$arr = array('０' => '0', '１' => '1', '２' => '2', '３' => '3', '４' => '4',
-'５' => '5', '６' => '6', '７' => '7', '８' => '8', '９' => '9',
-'Ａ' => 'A', 'Ｂ' => 'B', 'Ｃ' => 'C', 'Ｄ' => 'D', 'Ｅ' => 'E',
-'Ｆ' => 'F', 'Ｇ' => 'G', 'Ｈ' => 'H', 'Ｉ' => 'I', 'Ｊ' => 'J',
-'Ｋ' => 'K', 'Ｌ' => 'L', 'Ｍ' => 'M', 'Ｎ' => 'N', 'Ｏ' => 'O',
-'Ｐ' => 'P', 'Ｑ' => 'Q', 'Ｒ' => 'R', 'Ｓ' => 'S', 'Ｔ' => 'T',
-'Ｕ' => 'U', 'Ｖ' => 'V', 'Ｗ' => 'W', 'Ｘ' => 'X', 'Ｙ' => 'Y',
-'Ｚ' => 'Z', 'ａ' => 'a', 'ｂ' => 'b', 'ｃ' => 'c', 'ｄ' => 'd',
-'ｅ' => 'e', 'ｆ' => 'f', 'ｇ' => 'g', 'ｈ' => 'h', 'ｉ' => 'i',
-'ｊ' => 'j', 'ｋ' => 'k', 'ｌ' => 'l', 'ｍ' => 'm', 'ｎ' => 'n',
-'ｏ' => 'o', 'ｐ' => 'p', 'ｑ' => 'q', 'ｒ' => 'r', 'ｓ' => 's',
-'ｔ' => 't', 'ｕ' => 'u', 'ｖ' => 'v', 'ｗ' => 'w', 'ｘ' => 'x',
-'ｙ' => 'y', 'ｚ' => 'z',
-'（' => '(', '）' => ')');
 
-return strtr($str, $arr);
-}
 
 
 function ToExcel($r){

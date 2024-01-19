@@ -6,7 +6,26 @@ class Declarations {
     private $required = [];
     private $contents = [];
 
-    public function setContents(array $c){
+    public function set_Role(string $role){        
+        $this -> contents['role'] = $role;
+    
+        return $this;
+    }
+
+    public function set_Parts(array $parts){        
+        $this -> contents['parts'] = $parts;
+
+        return $this;   
+    }
+
+    public function get_contents(){
+        
+        return $this->contents;
+    }
+    
+    
+    
+    public function set_Properties(array $p){
         foreach ($p as $key => $value) {
             $value[1] = ($value[1]=='')? "STRING" : $value[1];
             $this->properties[$value[0]] =array("type"=> $value[1],
@@ -18,20 +37,7 @@ class Declarations {
         return $this;   
     }
 
-
-    public function setProperties(array $p){
-        foreach ($p as $key => $value) {
-            $value[1] = ($value[1]=='')? "STRING" : $value[1];
-            $this->properties[$value[0]] =array("type"=> $value[1],
-                                                     "description"=>$value[2]
-                                                    );
-            $this->required[] = $value[0];
-        }
-           
-        return $this;   
-    }
-
-    public function addDeclaration(string $name, string $description){
+    public function add_Declaration(string $name, string $description){
         $this->functionDeclarations[] = [
             'name' => $name,
             'description' => $description,
@@ -45,15 +51,18 @@ class Declarations {
         $this->required = [];
     }
 
-    public function getDeclarations(){
+    public function get_Declarations(){
         
         return $this->functionDeclarations;
     }
-
-    
+   
 
 }
 
 
+
+class ShowVariables {
+    
+}
 
 ?>

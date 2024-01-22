@@ -12,6 +12,7 @@ $contents = $declarations->get_contents();
 $post_fields['contents'] = $contents;
 
 
+
 //$declarations -> set_declarations_name("find_cryptoprice");
 //$declarations -> set_declarations_description("尋找特定加密貨幣在特定交易所的的價格");
 
@@ -31,6 +32,8 @@ $declarations->add_Declaration("find_theater", "尋找特定電影在特定地�
 $tools = $declarations->get_Declarations();
 $post_fields['tools']=[array("function_declarations"=>$tools)];
 
+echo "<BR><BR>-----------<BR><BR>";
+echo preg_replace("/(\[|\{)/ui",'${1}<br>',json_encode($tools,JSON_UNESCAPED_UNICODE)) ;
 
 
 //echo json_encode($post_fields,JSON_UNESCAPED_UNICODE);
@@ -56,12 +59,38 @@ if (curl_errno($ch)) {
 }
 
 curl_close($ch);
-echo $result;
+echo preg_replace("/(\[|\{)/ui",'${1}<br>',$result) ;
+
+$r = json_decode($result,true);
+$r = $r['candidates'][0]['content'];
+
+$contents['parts'] = array($contents['parts']);
+$contents = array($contents);
+
+//$declarations -> set_Role("model");
+$declarations -> set_Parts($r);
+$contents[] = $declarations->get_contents();
 
 
 
 
 
+echo "<BR><BR>-----------<BR><BR>";
+echo preg_replace("/(\[|\{)/ui",'${1}<br>',json_encode($contents,JSON_UNESCAPED_UNICODE)) ;
+
+
+/*
+
+echo "<BR><BR>-----------<BR><BR>";
+//$contents['role'] = array($contents['role']);
+echo preg_replace("/(\[|\{)/ui",'${1}<br>',json_encode($contents,JSON_UNESCAPED_UNICODE)) ;
+
+echo "<BR><BR>-----------<BR><BR>";
+$contents['parts'] = array($contents['parts']);
+$contents = array($contents);
+echo preg_replace("/(\[|\{)/ui",'${1}<br>',json_encode($contents,JSON_UNESCAPED_UNICODE)) ;
+
+echo "<BR><BR>";
 
 //echo json_encode($post_fields,JSON_UNESCAPED_UNICODE);
 //echo var_dump($post_fields);
@@ -76,7 +105,7 @@ $modelrole = array("functionCall"=>
 $declarations -> set_Parts($modelrole);
 $contents[] = $declarations->get_contents();
 
-//echo json_encode($contents,JSON_UNESCAPED_UNICODE);
+echo json_encode($contents,JSON_UNESCAPED_UNICODE);
 
-
+*/
 ?>

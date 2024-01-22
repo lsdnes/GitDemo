@@ -18,8 +18,10 @@ class Declarations {
         return $this;   
     }
 
+  
+
     public function get_contents(){
-        
+       
         return $this->contents;
     }
     
@@ -54,6 +56,27 @@ class Declarations {
     public function get_Declarations(){
         
         return $this->functionDeclarations;
+    }
+
+    public function GeminiPro($post_fields){
+        $ch = curl_init();
+        $api_key = $api_keys[rand(0,1)];
+        $url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=$api_key";
+        $header  = [
+                    'Content-Type: application/json'
+        ];
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($post_fields));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        $result = curl_exec($ch);
+        $string =  $result;
+        if (curl_errno($ch)) {
+            $string = 'Error: ' . curl_error($ch);
+        }
+        curl_close($ch);
+        return $string;
     }
    
 

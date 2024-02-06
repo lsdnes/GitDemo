@@ -8,7 +8,7 @@ $url = "https://iq.ul.com/awm/stylepage.aspx?style=%d";
 // 設定 $i 的範圍
 //$value = [[10000,19999],[20000,29999],[30000,39999],[40000,49999]];
 
-$value = [[10000,19999],[20000,29999]];
+$value = [[4000,4999],[12000,19999],[22450,29999],[30000,39999]];
 
 $i = 0;
 for($v=0;$v<count($value);$v++){
@@ -32,11 +32,12 @@ for($v=0;$v<count($value);$v++){
     $i++;
   }
   
-  echo "max=$max, min=$min, mid=$mid, i=$i<Br>";
+  $ulmax[] = $max;
   $i = 0;
 }
-
-
+$ulmax = json_encode($ulmax);
+echo $ulmax;
+file_put_contents("ulmax.txt", json_encode($ulmax));
 
 
 ?>

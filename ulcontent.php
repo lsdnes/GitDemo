@@ -1,27 +1,39 @@
 <?php
 date_default_timezone_set("Asia/Taipei");
-// 定義 $i 變數
+require_once('simple_html_dom.php');
+$q = "20222";
+$url = "https://iq.ul.com/awm/stylepage.aspx?style=$q";
 
+$htmlString = file_get_contents($url);
+//echo $htmlString;
 
 $html = str_get_html($htmlString); // Assuming $htmlString holds the HTML content
 
 
 $data = [];
 // Iterate through table rows with data
-foreach ($html->find('table#ObjTable tr:not(:first-child, :last-child, :nth-child(-n+2), :nth-child(-6n))') as $row) {
-    // Get header and corresponding value cells
+foreach ($html->find('table#ObjTable tr') as $row) {
+   // echo $row -> attr['style']."<BR>";
+
     $headerCell = $row->find('td', 0);
-    $valueCell = $row->find('td', 1);
-
-    // Check if valid cells found
+    $valueCell = $row-> find('td', 1);
+    $v0 ='';
     if ($headerCell && $valueCell) {
-        // Trim text contents for cleanliness
-        $header = trim($headerCell->plaintext);
-        $value = trim($valueCell->plaintext);
+        //echo $aa. 
+        if($headerCell-> plaintext !=''){
+            $header = trim($headerCell->plaintext);
+            $value = trim($valueCell->plaintext);
+            $data[$header] = $value;
+            $h = $header;
+        }else{
+            $td = $row -> find('td');
+            $tdString = "";
+            for($i=1;$i<count($td);$i++) $tdString = $tdString.$td[$i] -> plaintext. '|'; 
+            $data[$h]=trim($data[$h].trim($tdString)).PHP_EOL; 
 
-        // Add key-value pair to the data array
-        $data[$header] = $value;
-    }
+        }
+
+   }
 }
 
 
@@ -29,5 +41,5 @@ foreach ($html->find('table#ObjTable tr:not(:first-child, :last-child, :nth-chil
 
 $json = json_encode($data);
 
-
+echo $json;
 ?>

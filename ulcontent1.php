@@ -1,31 +1,8 @@
 <?php
 date_default_timezone_set("Asia/Taipei");
 require_once('simple_html_dom.php');
-require_once('../sqlquery.php');
-
-$query = new sqlQuery("mysqlpro","lsdtwfno_line","ASSOC");
-
-$Q = "SELECT style FROM `stylepage` WHERE content ='' ORDER BY modifydate , style LIMIT 15";
-//$Q = "SELECT style FROM `stylepage`  ORDER BY modifydate , style LIMIT 3";
-$r = $query -> getQuery($Q);
-
-for($i=0;$i<count($r);$i++){
-    $q = $r[$i]['style'];
-    echo $q."<BR>";
-    $content = getAwmContent($q);
-    $json = json_decode($content,true);
-    $content = preg_replace("/\\\\'/ui","'", $content);
-    $issued = $json['issued'];
-    $modifydate = date("Y-m-d H:i:s");
-    $revised = $json['revised'];
-    $Q = "UPDATE `stylepage` SET issued = '$issued', 
-        revised = '$revised', modifydate = '$modifydate', content = '$content' WHERE style = '$q'";
-    echo $Q."<BR><BR>";
-    if($issued!== null)$query -> getQuery($Q);
-}
-
-
-//echo getAwmContent($q);
+//1772 1042
+echo getAwmContent('1467');
 
 function getAwmContent($q){
     $url = "https://iq.ul.com/awm/stylepage.aspx?style=$q";
@@ -35,6 +12,7 @@ function getAwmContent($q){
     $data = [];
     //$data['UL758'] = 'APPLIANCE WIRING MATERIAL';
     $data['style'] = "AWM $q";
+   
     if($html -> find('span#IssLabel',0))
         $issued = $html -> find('span#IssLabel',0)->plaintext;
     else $issued = $html -> find('span#oldIssLabel',0)->plaintext;
@@ -50,7 +28,7 @@ function getAwmContent($q){
     else $desc = $html -> find('span#oldDescLabel',0)->plaintext;
     $data['desc'] = $desc;
 
-     $table = ($html->find('table#ObjTable tr')) ? $html->find('table#ObjTable tr') : $html->find('table[id]') ;
+    $table = ($html->find('table#ObjTable tr')) ? $html->find('table#ObjTable tr') : $html->find('table[id]') ;
 
    foreach ($table as $row) {
        $headerCell = $row->find('td', 0);
@@ -71,11 +49,7 @@ function getAwmContent($q){
         }
     }
 
-    if(preg_match("/The Style Page you have requested is currently unavailable/ui", $html)){
-         $data['issued'] = '0000-00-00 00:00:00';
-         $data['revised'] = '0000-00-00 00:00:00';
-         $data["desc"]  = 'The Style Page you have requested is currently unavailable';
-    }
+
 
     return json_encode($data,JSON_UNESCAPED_SLASHES);
     //return preg_replace("/\\\\'/ui","'", $json);
